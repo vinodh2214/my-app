@@ -13,7 +13,7 @@ export default function LoginPage() {
   const handleLogin = () => {
     setError("");
 
-    if (username === "vk" && password === "VK*India") {
+    if (username === "vk" && password === "VKIndia") {
       setLoading(true);
 
       setTimeout(() => {
