@@ -1,29 +1,31 @@
 pipeline {
     agent any
 
-    // 👇 This enables GitHub webhook trigger
-    triggers {
-        githubPush()
-    }
-
     stages {
 
-        stage('Triggered ✅') {
+        stage('Identify Build') {
             steps {
-                echo "🚀 Pipeline triggered from GitHub push!"
+                script {
+                    if (env.CHANGE_ID) {
+                        echo "🔁 Pull Request Build: ${env.CHANGE_ID}"
+                    } else {
+                        echo "🚀 Branch Build: ${env.BRANCH_NAME}"
+                    }
+                }
             }
         }
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/vinodh2214/my-app.git',credentialsId: 'github-creds'
+                checkout scm
             }
         }
 
         stage('Verify') {
             steps {
                 sh '''
-                echo "Build triggered at:"
+                echo "Branch: $BRANCH_NAME"
+                echo "PR ID: $CHANGE_ID"
                 date
                 ls -la
                 '''
