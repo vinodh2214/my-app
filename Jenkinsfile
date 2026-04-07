@@ -1,33 +1,35 @@
 pipeline {
     agent any
 
-    // 👇 This enables GitHub webhook trigger
-    triggers {
-        githubPush()
+    tools {
+        nodejs 'nodejs'   
+    }
+
+    environment {
+        NODE_ENV = 'production'
     }
 
     stages {
 
-        stage('Triggered ✅') {
+        stage('Install') {
             steps {
-                echo "🚀 Pipeline triggered from GitHub push!"
+                sh 'npm install'
             }
         }
 
-        stage('Checkout Code') {
+        stage('Build') {
             steps {
-                git branch: 'test', url: 'https://github.com/vinodh2214/my-app.git',credentialsId: 'github-creds'
+                sh 'npm run build'
             }
         }
+    }
 
-        stage('Verify') {
-            steps {
-                sh '''
-                echo "Build triggered at:"
-                date
-                ls -la
-                '''
-            }
+    post {
+        success {
+            echo "✅ Build success for ${env.BRANCH_NAME}"
+        }
+        failure {
+            echo "❌ Build failed for ${env.BRANCH_NAME}"
         }
     }
 }
