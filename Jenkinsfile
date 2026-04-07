@@ -1,35 +1,39 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs'   
-    }
-
-    environment {
-        NODE_ENV = 'production'
-    }
-
     stages {
 
-        stage('Install') {
+        stage('Detect PR') {
             steps {
-                sh 'npm install'
+                script {
+                    if (env.CHANGE_ID) {
+                        echo "🔁 Pull Request Detected!"
+                        echo "PR ID: ${env.CHANGE_ID}"
+                        echo "Source Branch: ${env.CHANGE_BRANCH}"
+                        echo "Target Branch: ${env.CHANGE_TARGET}"
+                    } else {
+                        echo "🚫 Not a PR build"
+                        echo "Branch: ${env.BRANCH_NAME}"
+                    }
+                }
             }
         }
 
-        stage('Build') {
+        stage('Log Info') {
             steps {
-                sh 'npm run build'
+                echo "📦 Repository: ${env.JOB_NAME}"
+                echo "🌿 Branch: ${env.BRANCH_NAME}"
+                echo "👤 Build Triggered By PR: ${env.CHANGE_ID ?: 'No'}"
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build success for ${env.BRANCH_NAME}"
+            echo "✅ Pipeline executed successfully"
         }
         failure {
-            echo "❌ Build failed for ${env.BRANCH_NAME}"
+            echo "❌ Pipeline failed"
         }
     }
 }
