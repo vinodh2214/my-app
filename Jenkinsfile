@@ -1,3 +1,3 @@
 @Library('shared-lib') _
 
-pipeline()
+buildPipeline()
