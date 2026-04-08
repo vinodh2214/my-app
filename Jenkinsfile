@@ -9,7 +9,7 @@ pipeline {
                     if (env.CHANGE_ID) {
                         echo "🔁 PR Build: ${env.CHANGE_ID}"
                     } else {
-                        echo "🚀 Branch Build: ${env.BRANCH_NAME}"
+                        echo " Branch Build: ${env.BRANCH_NAME}"
                     }
                 }
             }
