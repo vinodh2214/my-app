@@ -24,7 +24,7 @@ export default function LoginPage() {
 
       }, 3000);
     } else {
-      setError("Invalid credentials ❌");
+      setError("Invalid credentials ");
     }
   };
 
